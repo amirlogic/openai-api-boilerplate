@@ -1,6 +1,8 @@
 
 require('dotenv').config()
 
+const readline = require('node:readline')
+
 const { Configuration, OpenAIApi } = require("openai");
 
 const configuration = new Configuration({
@@ -8,40 +10,27 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-(async()=>{
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+console.log("Welcome to OpenAI, please input your prompt")
+
+rl.on('line', async (line) => {
 
     const completion = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: "The speed equals distance divided by",
-    });
+        model: "text-davinci-003",
+        prompt: line,
+        });
 
-    //let stack = completion.data.choices.map()
+    completion.data.choices.map((row)=>{
 
+        console.log(row.text);
+
+    })
     
-
-    console.table(completion.data.choices.map((row)=>{
-
-        return row.text;
-
-    }));
-
-    
-
-    /* }
-    catch(aierr){
-
-        console.error(aierr)
-    } */
-
-    //console.log(completion.data)
-
-
-    //const response = await openai.listModels();
-
-    //console.log(response.data)
-
-
-})();
+});
 
 
 
